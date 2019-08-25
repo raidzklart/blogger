@@ -1,5 +1,5 @@
 class ArticlesController < ApplicationController
-    include ArticlesHelper
+    before_action :require_login, only: [:new, :create, :edit, :update]
     def index
         @articles = Article.all
     end
@@ -42,5 +42,11 @@ class ArticlesController < ApplicationController
         flash.notice = "Article '#{@article.title}' Updated!"
 
         redirect_to article_path(@article)
+    end
+
+    private
+
+    def article_params
+        params.require(:article).permit(:title, :body, :tag_list, :image)
     end
 end
